@@ -108,7 +108,7 @@ describe("Unit test for recommendation service", () => {
 
         expect(recommendationRepository.getAmountByScore).toBeCalled();
     })
-    
+
     it("Should add an upvote on the recommendation",async () => {
         const id = recommendationFactories.numberFactory();
         const recommendation = recommendationFactories.recommendationDataFactory();
@@ -116,15 +116,16 @@ describe("Unit test for recommendation service", () => {
         jest
         .spyOn(recommendationRepository, "updateScore")
         .mockImplementationOnce((): any => {});
+ 
         jest
-        .spyOn(recommendationService, "getByIdOrFail")
+        .spyOn(recommendationRepository, "find")
         .mockImplementationOnce((): any => {
             return recommendation
         });
 
         await recommendationService.upvote(id);
 
-        expect(recommendationService.getByIdOrFail).toBeCalled();
+        expect(recommendationRepository.find).toBeCalled();
         expect(recommendationRepository.updateScore).toBeCalled();
     })
 
