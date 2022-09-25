@@ -33,7 +33,7 @@ describe("Unit test for recommendation service", () =>{
         jest
         .spyOn(recommendationRepository, "findByName")
         .mockImplementationOnce((): any => {
-          return recomendation
+            return recomendation
         });
         
         const promise = recommendationService.insert(recomendation);
@@ -43,9 +43,25 @@ describe("Unit test for recommendation service", () =>{
             message: "Recommendations names must be unique"
         });
 
+        expect(recommendationRepository.findByName).toBeCalled();
         expect(recommendationRepository.create).not.toBeCalled();
     })
-    it.todo("Should get recommendation by id")
+
+    it("Should get recommendation by id", async () => {
+        const id = recommendationFactories.idFactory();
+        const recomendation = recommendationFactories.recommendationDataFactory(); 
+        
+        jest
+        .spyOn(recommendationRepository, "find")
+        .mockImplementationOnce((): any => {
+            return recomendation
+        });
+
+        const result = await recommendationService.getById(id);
+
+        expect(recommendationRepository.find).toBeCalled();
+        expect(result).toEqual(recomendation);
+    })
     it.todo("Should get all recommendations")
     it.todo("Should get an amount recommendations ranked by votes")
     it.todo("Should add an upvote on the recommendation")
