@@ -1,4 +1,7 @@
+import { recommendationFactories } from './../factories/recommendationFactory';
 import { jest } from '@jest/globals';
+import { recommendationService } from '../../src/services/recommendationsService';
+import { recommendationRepository } from '../../src/repositories/recommendationRepository';
 
 beforeEach(() => {
     jest.resetAllMocks();
@@ -6,7 +9,24 @@ beforeEach(() => {
 });
 
 describe("Unit test for recommendation service", () =>{
-    it.todo("Should create a recommendation")
+    it("Should create a recommendation", async () =>{
+        const recomendation = recommendationFactories.recommendationDataFactory();
+
+        jest
+        .spyOn(recommendationRepository, "findByName")
+        .mockImplementationOnce((): any => {
+          return false;
+        });
+  
+        jest
+        .spyOn(recommendationRepository, "create")
+        .mockImplementationOnce((): any => {});
+        
+        await recommendationService.insert(recomendation);
+  
+        expect(recommendationRepository.findByName).toBeCalled();
+        expect(recommendationRepository.create).toBeCalled();
+    })
     it.todo("Should not create a duplicated recommendation")
     it.todo("Should get recommendation by id")
     it.todo("Should get all recommendations")
