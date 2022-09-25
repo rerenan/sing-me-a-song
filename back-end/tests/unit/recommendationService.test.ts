@@ -128,7 +128,24 @@ describe("Unit test for recommendation service", () => {
         expect(recommendationRepository.find).toBeCalled();
         expect(recommendationRepository.updateScore).toBeCalled();
     })
+    it("Should returns not fond error if recommendation not exists", async () => {
+        const id = recommendationFactories.numberFactory();
+ 
+        jest
+        .spyOn(recommendationRepository, "find")
+        .mockImplementationOnce((): any => {
+            return false;
+        });
 
+        const promise = recommendationService.upvote(id);
+
+        expect(promise).rejects.toEqual({ 
+            type: "not_found", 
+            message: ""
+        });
+
+        expect(recommendationRepository.find).toBeCalled();
+    })
     it.todo("Should decrement an upvote on the recommendation")
     it.todo("Should get random recommendation")
     it.todo("Should remove recommendation if votes are less -5")
