@@ -108,7 +108,26 @@ describe("Unit test for recommendation service", () => {
 
         expect(recommendationRepository.getAmountByScore).toBeCalled();
     })
-    it.todo("Should add an upvote on the recommendation")
+    
+    it("Should add an upvote on the recommendation",async () => {
+        const id = recommendationFactories.numberFactory();
+        const recommendation = recommendationFactories.recommendationDataFactory();
+
+        jest
+        .spyOn(recommendationRepository, "updateScore")
+        .mockImplementationOnce((): any => {});
+        jest
+        .spyOn(recommendationService, "getByIdOrFail")
+        .mockImplementationOnce((): any => {
+            return recommendation
+        });
+
+        await recommendationService.upvote(id);
+
+        expect(recommendationService.getByIdOrFail).toBeCalled();
+        expect(recommendationRepository.updateScore).toBeCalled();
+    })
+
     it.todo("Should decrement an upvote on the recommendation")
     it.todo("Should get random recommendation")
     it.todo("Should remove recommendation if votes are less -5")
