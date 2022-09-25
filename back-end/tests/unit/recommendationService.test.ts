@@ -50,7 +50,7 @@ describe("Unit test for recommendation service", () => {
     })
 
     it("Should get recommendation by id", async () => {
-        const id = recommendationFactories.idFactory();
+        const id = recommendationFactories.numberFactory();
         const recomendation = recommendationFactories.recommendationDataFactory(); 
         
         jest
@@ -65,8 +65,7 @@ describe("Unit test for recommendation service", () => {
         expect(result).toEqual(recomendation);
     })
     it("Should return not found error if recommendation not exists", async () => {
-        const id = recommendationFactories.idFactory();
-        const recomendation = recommendationFactories.recommendationDataFactory(); 
+        const id = recommendationFactories.numberFactory();
         
         jest
         .spyOn(recommendationRepository, "find")
@@ -74,13 +73,14 @@ describe("Unit test for recommendation service", () => {
         });
 
         const promise = recommendationService.getById(id);
-        
+
         expect(promise).rejects.toEqual({ 
             type: "not_found", 
             message: ""
         });
         expect(recommendationRepository.find).toBeCalled();
     })
+
     it("Should get all recommendations", async () => {
         const recomendationArray = recommendationFactories.recomendationArrayFactory();
 
@@ -95,7 +95,19 @@ describe("Unit test for recommendation service", () => {
         expect(recommendationRepository.findAll).toBeCalled();
         expect(result).toEqual(recomendationArray);
     })
-    it.todo("Should get an amount recommendations ranked by votes")
+
+    it("Should get an amount recommendations ranked by votes", async () =>{
+
+        const amount = recommendationFactories.numberFactory();
+
+        jest
+        .spyOn(recommendationRepository, "getAmountByScore")
+        .mockImplementationOnce((): any => {});
+
+        await recommendationService.getTop(amount);
+
+        expect(recommendationRepository.getAmountByScore).toBeCalled();
+    })
     it.todo("Should add an upvote on the recommendation")
     it.todo("Should decrement an upvote on the recommendation")
     it.todo("Should get random recommendation")

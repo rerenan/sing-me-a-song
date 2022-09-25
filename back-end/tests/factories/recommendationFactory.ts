@@ -16,12 +16,12 @@ function recomendationArrayFactory() {
     return recomendationArray;
 }
 
-function idFactory() {
+function numberFactory() {
     return faker.datatype.number();
 }
 
 export const recommendationFactories = {
     recommendationDataFactory,
     recomendationArrayFactory,
-    idFactory,
+    numberFactory,
 }
