@@ -6,7 +6,15 @@ function recommendationDataFactory() {
         "youtubeLink": faker.internet.url()
     }
 }
-function recomendationArrayFactory() {
+function updatedRecommendatioDataFactory() {
+    return {
+        "name": faker.lorem.lines(),
+        "youtubeLink": faker.internet.url(),
+        "score": faker.datatype.number({max: 1000})
+    }
+}
+
+function recommendationArrayFactory() {
     const randNumber = faker.datatype.number({max: 20});
     const recomendationArray = [];
     for(let i = 0; i < randNumber; i++){
@@ -22,6 +30,7 @@ function numberFactory() {
 
 export const recommendationFactories = {
     recommendationDataFactory,
-    recomendationArrayFactory,
+    recommendationArrayFactory,
     numberFactory,
+    updatedRecommendatioDataFactory
 }

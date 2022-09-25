@@ -82,7 +82,7 @@ describe("Unit test for recommendation service", () => {
     })
 
     it("Should get all recommendations", async () => {
-        const recomendationArray = recommendationFactories.recomendationArrayFactory();
+        const recomendationArray = recommendationFactories.recommendationArrayFactory();
 
         jest
         .spyOn(recommendationRepository, "findAll")
@@ -128,7 +128,8 @@ describe("Unit test for recommendation service", () => {
         expect(recommendationRepository.find).toBeCalled();
         expect(recommendationRepository.updateScore).toBeCalled();
     })
-    it("Should returns not fond error if recommendation not exists", async () => {
+
+    it("Should not add upvote to recommendation that does not exist", async () => {
         const id = recommendationFactories.numberFactory();
  
         jest
@@ -146,7 +147,31 @@ describe("Unit test for recommendation service", () => {
 
         expect(recommendationRepository.find).toBeCalled();
     })
-    it.todo("Should decrement an upvote on the recommendation")
+
+    it("Should decrease recommendation vote", async () => {
+        
+        const id = recommendationFactories.numberFactory();
+        const recommendation = recommendationFactories.recommendationDataFactory();
+        const updatedRecomendation = recommendationFactories.updatedRecommendatioDataFactory();
+        
+        jest
+        .spyOn(recommendationRepository, "updateScore")
+        .mockImplementationOnce((): any => {
+            return updatedRecomendation
+        });
+ 
+        jest
+        .spyOn(recommendationRepository, "find")
+        .mockImplementationOnce((): any => {
+            return recommendation
+        });
+
+         await recommendationService.downvote(id);
+
+        expect(recommendationRepository.find).toBeCalled();
+        expect(recommendationRepository.updateScore).toBeCalled();
+    });
+    
     it.todo("Should get random recommendation")
     it.todo("Should remove recommendation if votes are less -5")
     it.todo("Should return gt if random params is less than 7")
