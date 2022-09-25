@@ -27,7 +27,24 @@ describe("Unit test for recommendation service", () =>{
         expect(recommendationRepository.findByName).toBeCalled();
         expect(recommendationRepository.create).toBeCalled();
     })
-    it.todo("Should not create a duplicated recommendation")
+    it("Should not create a duplicated recommendation", async () =>{
+        const recomendation = recommendationFactories.recommendationDataFactory();
+        
+        jest
+        .spyOn(recommendationRepository, "findByName")
+        .mockImplementationOnce((): any => {
+          return recomendation
+        });
+        
+        const promise = recommendationService.insert(recomendation);
+
+        expect(promise).rejects.toEqual({ 
+            type: "conflict", 
+            message: "Recommendations names must be unique"
+        });
+
+        expect(recommendationRepository.create).not.toBeCalled();
+    })
     it.todo("Should get recommendation by id")
     it.todo("Should get all recommendations")
     it.todo("Should get an amount recommendations ranked by votes")
