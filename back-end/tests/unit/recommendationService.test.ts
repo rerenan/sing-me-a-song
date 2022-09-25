@@ -64,7 +64,23 @@ describe("Unit test for recommendation service", () => {
         expect(recommendationRepository.find).toBeCalled();
         expect(result).toEqual(recomendation);
     })
+    it("Should return not found error if recommendation not exists", async () => {
+        const id = recommendationFactories.idFactory();
+        const recomendation = recommendationFactories.recommendationDataFactory(); 
+        
+        jest
+        .spyOn(recommendationRepository, "find")
+        .mockImplementationOnce((): any => {
+        });
 
+        const promise = recommendationService.getById(id);
+        
+        expect(promise).rejects.toEqual({ 
+            type: "not_found", 
+            message: ""
+        });
+        expect(recommendationRepository.find).toBeCalled();
+    })
     it("Should get all recommendations", async () => {
         const recomendationArray = recommendationFactories.recomendationArrayFactory();
 
