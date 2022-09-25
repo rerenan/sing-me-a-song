@@ -22,5 +22,6 @@ function idFactory() {
 
 export const recommendationFactories = {
     recommendationDataFactory,
-    idFactory
+    recomendationArrayFactory,
+    idFactory,
 }

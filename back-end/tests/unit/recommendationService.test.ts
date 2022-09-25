@@ -8,8 +8,9 @@ beforeEach(() => {
     jest.clearAllMocks();
 });
 
-describe("Unit test for recommendation service", () =>{
-    it("Should create a recommendation", async () =>{
+describe("Unit test for recommendation service", () => {
+
+    it("Should create a recommendation", async () => {
         const recomendation = recommendationFactories.recommendationDataFactory();
 
         jest
@@ -27,7 +28,8 @@ describe("Unit test for recommendation service", () =>{
         expect(recommendationRepository.findByName).toBeCalled();
         expect(recommendationRepository.create).toBeCalled();
     })
-    it("Should not create a duplicated recommendation", async () =>{
+
+    it("Should not create a duplicated recommendation", async () => {
         const recomendation = recommendationFactories.recommendationDataFactory();
         
         jest
@@ -62,7 +64,21 @@ describe("Unit test for recommendation service", () =>{
         expect(recommendationRepository.find).toBeCalled();
         expect(result).toEqual(recomendation);
     })
-    it.todo("Should get all recommendations")
+
+    it("Should get all recommendations", async () => {
+        const recomendationArray = recommendationFactories.recomendationArrayFactory();
+
+        jest
+        .spyOn(recommendationRepository, "findAll")
+        .mockImplementationOnce((): any => {
+            return recomendationArray
+        });
+
+        const result = await recommendationService.get();
+
+        expect(recommendationRepository.findAll).toBeCalled();
+        expect(result).toEqual(recomendationArray);
+    })
     it.todo("Should get an amount recommendations ranked by votes")
     it.todo("Should add an upvote on the recommendation")
     it.todo("Should decrement an upvote on the recommendation")
