@@ -56,9 +56,19 @@ describe("Test GET /", () => {
 })
 
 describe("Test GET /random", () => {
-    it.todo("Should return status 200 and return recommendations")
+    it("Should return status 200 and return recommendation", async () => {
+        const recommendation = recommendationFactories.recommendationDataFactory();
+
+        await supertest(app).post("/recommendations").send(recommendation)
+
+        const result = await supertest(app).get("/recommendations/random")
+        
+        expect(result.status).toEqual(200);
+        expect(result.body).not.toBeNull();
+    })
     it.todo("Should return status 404 if recommendations not exists")
 })
+    
 
 describe("Test GET /top/amount", () => {
     it.todo("Should return status 200 and return recommendations")
