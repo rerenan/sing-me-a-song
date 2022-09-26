@@ -215,8 +215,17 @@ describe("Unit test for recommendation service", () => {
         expect(recommendationArray).toContain(result);
     })
   
-    it.todo("Should return gt if random params is less than 7")
-    it.todo("Should return lte if random params is greater than 7")
+    it("Should return gt if random params is less than 7 or return lte if random params is greater than 7",async () => {
+        const random = Math.random();
+
+        const result = recommendationService.getScoreFilter(random);
+
+        if(random < 0.7){
+            expect(result).toEqual("gt");
+        }else{
+            expect(result).toEqual("lte");
+        }
+    })
     it.todo("Should return recomendation by score if recommendation length is greater than 0")
     it.todo("Should return all recomendation if recommendation length is 0")
 })
