@@ -45,7 +45,7 @@ describe("Test POST /recommendations",  () => {
     })
 })
 
-describe("Test GET /", () => {
+describe("Test GET /recommendations", () => {
     it("Should return status 200 and return recommendations",async () => {
         
         const result = await supertest(app).get("/recommendations")
@@ -55,7 +55,7 @@ describe("Test GET /", () => {
     })
 })
 
-describe("Test GET /random", () => {
+describe("Test GET /recommendations/random", () => {
     it("Should return status 200 and return recommendation", async () => {
         const recommendation = recommendationFactories.recommendationDataFactory();
 
@@ -74,7 +74,7 @@ describe("Test GET /random", () => {
 })
     
 
-describe("Test GET /top/amount", () => {
+describe("Test GET /recommendations/top/:amount", () => {
     it("Should return status 200 and return recommendations",async () => {
         const result = await supertest(app).get("/recommendations/top/1")
 
@@ -83,8 +83,19 @@ describe("Test GET /top/amount", () => {
     })
 })
 
-describe("Test GET /:id", ()=>{
-    it.todo("Should return status 200 and return recommendations")
+describe("Test GET /recommendations/:id", ()=>{
+    it("Should return status 200 and return recommendations",async () => {
+        const recommendation = recommendationFactories.recommendationDataFactory();
+
+        await supertest(app).post("/recommendations").send(recommendation)
+
+        const {body: recommendations} = await supertest(app).get("/recommendations")
+        
+        const result = await supertest(app).get(`/recommendations/${recommendations[0].id}`)
+
+        expect(result.status).toEqual(200);
+        expect(result.body).not.toBeNull();
+    })
     it.todo("Should return status 404 if recommendations not exists")
 })
 
