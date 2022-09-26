@@ -75,7 +75,12 @@ describe("Test GET /random", () => {
     
 
 describe("Test GET /top/amount", () => {
-    it.todo("Should return status 200 and return recommendations")
+    it("Should return status 200 and return recommendations",async () => {
+        const result = await supertest(app).get("/recommendations/top/1")
+
+        expect(result.status).toEqual(200);
+        expect(result.body).not.toBeNull();
+    })
 })
 
 describe("Test GET /:id", ()=>{
