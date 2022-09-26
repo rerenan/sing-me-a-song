@@ -126,21 +126,26 @@ describe("Test POST  /recommendations/:id/upvote", () => {
 })
 
 describe("Test GET /:id/downvote", () => {
+
     it("Should return status 200 and decrease vote to recommendation", async () => {
+        
         const recommendation = recommendationFactories.recommendationDataFactory();
 
-        await supertest(app).post("/recommendations").send(recommendation)
+        await supertest(app).post("/recommendations").send(recommendation);
 
-        const {body: recommendations} = await supertest(app).get("/recommendations")
+        const {body: recommendations} = await supertest(app).get("/recommendations");
 
-        const result = await supertest(app).post(`/recommendations/${recommendations[0].id}/downvote`)
+        const result = await supertest(app).post(`/recommendations/${recommendations[0].id}/downvote`);
 
-        const updatedRecommendation = await supertest(app).get(`/recommendations/${recommendations[0].id}`)
+        const updatedRecommendation = await supertest(app).get(`/recommendations/${recommendations[0].id}`);
+
         expect(result.status).toEqual(200);
-        expect(updatedRecommendation.body.score).toEqual(recommendations[0].score - 1)
+        expect(updatedRecommendation.body.score).toEqual(recommendations[0].score - 1);
     })
+
     it("Should return status 404 if recommendations not exists", async () =>{
-        const result = await supertest(app).post("/recommendations/1/downvote")
+
+        const result = await supertest(app).post("/recommendations/1/downvote");
 
         expect(result.status).toEqual(404);
     })
