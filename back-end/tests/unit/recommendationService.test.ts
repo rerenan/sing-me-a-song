@@ -2,6 +2,9 @@ import { recommendationFactories } from './../factories/recommendationFactory';
 import { jest } from '@jest/globals';
 import { recommendationService } from '../../src/services/recommendationsService';
 import { recommendationRepository } from '../../src/repositories/recommendationRepository';
+import { number } from 'joi';
+import { count } from 'console';
+import { CallTracker } from 'assert';
 
 beforeEach(() => {
     jest.resetAllMocks();
@@ -241,9 +244,25 @@ describe("Unit test for recommendation service", () => {
         });
 
         const result = await recommendationService.getByScore(scoreFilter);
-        
+
         expect(result).toEqual(recommendationArray);
         expect(recommendationRepository.findAll).toBeCalled();
     })
-    it.todo("Should return all recomendation if recommendation length is 0")
+    it("Should return all recomendation if recommendation length is 0",async () => {
+        const scoreFilter = recommendationFactories.scoreFilterFactory();
+        const recommendationArray = recommendationFactories.recommendationArrayFactory();
+        jest
+        .spyOn(recommendationRepository, "findAll")
+        .mockImplementationOnce((): any => {
+            return [];
+        })
+        .mockImplementationOnce((): any => {
+            return recommendationArray
+        });
+        
+        const result = await recommendationService.getByScore(scoreFilter);
+        
+        expect(result).toEqual(recommendationArray);
+        expect(recommendationRepository.findAll).toBeCalledTimes(2);
+    })
 })
