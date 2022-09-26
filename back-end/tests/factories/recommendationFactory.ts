@@ -39,11 +39,17 @@ function numberFactory() {
 function floatLessSevenFactory(){
     return faker.datatype.float({max: 0.7})
 }
+
+function scoreFilterFactory(){
+    return faker.helpers.arrayElement<"gt" | "lte">(["gt","lte"])
+}
+
 export const recommendationFactories = {
     recommendationDataFactory,
     recommendationArrayFactory,
     numberFactory,
     updatedRecommendationDataFactory,
     hatedRecommendationDataFactory,
-    floatLessSevenFactory
+    floatLessSevenFactory,
+    scoreFilterFactory
 }

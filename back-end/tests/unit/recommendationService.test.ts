@@ -222,13 +222,28 @@ describe("Unit test for recommendation service", () => {
 
         expect(result).toEqual("gt");
     })
-    it("return lte if random params is greater than 7" ,async () => {
+    it("return lte if random params is greater than 7" , async () => {
         const number = recommendationFactories.floatLessSevenFactory() + 0.7
-        
+       
         const result = recommendationService.getScoreFilter(number);
         
         expect(result).toEqual("lte");
     })
-    it.todo("Should return recomendation by score if recommendation length is greater than 0")
+    it("Should return recomendation by score if recommendation length is greater than 0", async () => {
+        const scoreFilter = recommendationFactories.scoreFilterFactory();
+
+        const recommendationArray = recommendationFactories.recommendationArrayFactory();
+
+        jest
+        .spyOn(recommendationRepository, "findAll")
+        .mockImplementationOnce((): any => {
+            return recommendationArray
+        });
+
+        const result = await recommendationService.getByScore(scoreFilter);
+        
+        expect(result).toEqual(recommendationArray);
+        expect(recommendationRepository.findAll).toBeCalled();
+    })
     it.todo("Should return all recomendation if recommendation length is 0")
 })
