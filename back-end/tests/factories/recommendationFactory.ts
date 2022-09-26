@@ -22,7 +22,7 @@ function hatedRecommendationDataFactory() {
     }
 }
 
-function recommendationArrayFactory() {
+async function recommendationArrayFactory() {
     const randNumber = faker.datatype.number({max: 20});
     const recomendationArray = [];
     for(let i = 0; i < randNumber; i++){

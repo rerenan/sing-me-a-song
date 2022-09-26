@@ -2,9 +2,6 @@ import { recommendationFactories } from './../factories/recommendationFactory';
 import { jest } from '@jest/globals';
 import { recommendationService } from '../../src/services/recommendationsService';
 import { recommendationRepository } from '../../src/repositories/recommendationRepository';
-import { number } from 'joi';
-import { count } from 'console';
-import { CallTracker } from 'assert';
 
 beforeEach(() => {
     jest.resetAllMocks();
@@ -85,7 +82,7 @@ describe("Unit test for recommendation service", () => {
     })
 
     it("Should get all recommendations", async () => {
-        const recomendationArray = recommendationFactories.recommendationArrayFactory();
+        const recomendationArray = await recommendationFactories.recommendationArrayFactory();
 
         jest
         .spyOn(recommendationRepository, "findAll")
@@ -204,7 +201,7 @@ describe("Unit test for recommendation service", () => {
     })
 
     it("Should get random recommendation",async () => {
-        const recommendationArray = recommendationFactories.recommendationArrayFactory();
+        const recommendationArray = await recommendationFactories.recommendationArrayFactory();
 
         jest
         .spyOn(recommendationRepository, "findAll")
@@ -216,6 +213,26 @@ describe("Unit test for recommendation service", () => {
 
         expect(recommendationRepository.findAll).toBeCalled();
         expect(recommendationArray).toContain(result);
+    })
+
+    it("Should not get random recommendation if not have recommendation ",async () => {
+    
+        jest
+        .spyOn(recommendationRepository, "findAll")
+        .mockImplementationOnce((): any => {
+            return [];
+        })
+        .mockImplementationOnce((): any => {
+            return [];
+        })
+
+        const promise = recommendationService.getRandom();
+        
+        expect(promise).rejects.toEqual({ 
+            type: "not_found", 
+            message: ""
+        });
+        expect(recommendationRepository.findAll).toBeCalled();
     })
   
     it("Should return gt if random params is less than 7 ", async () => {
@@ -235,7 +252,7 @@ describe("Unit test for recommendation service", () => {
     it("Should return recomendation by score if recommendation length is greater than 0", async () => {
         const scoreFilter = recommendationFactories.scoreFilterFactory();
 
-        const recommendationArray = recommendationFactories.recommendationArrayFactory();
+        const recommendationArray = await recommendationFactories.recommendationArrayFactory();
 
         jest
         .spyOn(recommendationRepository, "findAll")
@@ -250,7 +267,7 @@ describe("Unit test for recommendation service", () => {
     })
     it("Should return all recomendation if recommendation length is 0",async () => {
         const scoreFilter = recommendationFactories.scoreFilterFactory();
-        const recommendationArray = recommendationFactories.recommendationArrayFactory();
+        const recommendationArray = await recommendationFactories.recommendationArrayFactory();
         jest
         .spyOn(recommendationRepository, "findAll")
         .mockImplementationOnce((): any => {
