@@ -66,7 +66,11 @@ describe("Test GET /random", () => {
         expect(result.status).toEqual(200);
         expect(result.body).not.toBeNull();
     })
-    it.todo("Should return status 404 if recommendations not exists")
+    it("Should return status 404 if recommendations not exists",async () => {
+        const result = await supertest(app).get("/recommendations/random")
+        
+        expect(result.status).toEqual(404);
+    })
 })
     
 
