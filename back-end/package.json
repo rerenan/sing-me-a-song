@@ -10,6 +10,7 @@
     "dev": "nodemon src/server.ts",
     "prisma:reset": "prisma migrate reset",
     "prisma:migrate": "prisma migrate dev",
+    "test:integration": "npx dotenv -e .env.test jest --no-cache -i --testPathPattern=tests/integration",
     "test:unit": "dotenv -e .env.test jest -- -i --coverage --testPathPattern=tests/unit"
   },
   "keywords": [],
