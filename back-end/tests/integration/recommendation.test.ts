@@ -126,7 +126,19 @@ describe("Test POST  /recommendations/:id/upvote", () => {
 })
 
 describe("Test GET /:id/downvote", () => {
-    it.todo("Should return status 200 and decrease vote to recommendation")
+    it("Should return status 200 and decrease vote to recommendation", async () => {
+        const recommendation = recommendationFactories.recommendationDataFactory();
+
+        await supertest(app).post("/recommendations").send(recommendation)
+
+        const {body: recommendations} = await supertest(app).get("/recommendations")
+
+        const result = await supertest(app).post(`/recommendations/${recommendations[0].id}/downvote`)
+
+        const updatedRecommendation = await supertest(app).get(`/recommendations/${recommendations[0].id}`)
+        expect(result.status).toEqual(200);
+        expect(updatedRecommendation.body.score).toEqual(recommendations[0].score - 1)
+    })
     it.todo("Should return status 404 if recommendations not exists")
 })
 
