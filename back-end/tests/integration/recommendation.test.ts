@@ -25,7 +25,7 @@ describe("Test POST /recommendations",  () => {
 
         expect(result.status).toEqual(201)
     })
-    it("Should return status 409, if recommendation already exists",async () => {
+    it("Should return status 409, if recommendation already exists", async () => {
         const recommendation = recommendationFactories.recommendationDataFactory();
 
         await supertest(app).post("/recommendations").send(recommendation)
@@ -35,7 +35,14 @@ describe("Test POST /recommendations",  () => {
         expect(result.status).toEqual(409)
 
     })
-    it.todo("Should return status 422, if send recommendation in format invalid")
+    it("Should return status 422, if send recommendation in format invalid", async () => {
+        const recommendation = recommendationFactories.recommendationDataFactory();
+        delete recommendation.name;
+
+        const result = await supertest(app).post("/recommendations").send(recommendation)
+
+        expect(result.status).toEqual(422)
+    })
 })
 
 describe("Test GET /", () => {
