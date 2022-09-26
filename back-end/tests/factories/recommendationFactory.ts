@@ -6,11 +6,19 @@ function recommendationDataFactory() {
         "youtubeLink": faker.internet.url()
     }
 }
-function updatedRecommendatioDataFactory() {
+function updatedRecommendationDataFactory() {
     return {
         "name": faker.lorem.lines(),
         "youtubeLink": faker.internet.url(),
         "score": faker.datatype.number({max: 1000})
+    }
+}
+
+function hatedRecommendationDataFactory() {
+    return {
+        "name": faker.lorem.lines(),
+        "youtubeLink": faker.internet.url(),
+        "score": -1*(faker.datatype.number({min: 4}))
     }
 }
 
@@ -32,5 +40,6 @@ export const recommendationFactories = {
     recommendationDataFactory,
     recommendationArrayFactory,
     numberFactory,
-    updatedRecommendatioDataFactory
+    updatedRecommendationDataFactory,
+    hatedRecommendationDataFactory
 }

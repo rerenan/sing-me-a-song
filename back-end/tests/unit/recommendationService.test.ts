@@ -152,7 +152,7 @@ describe("Unit test for recommendation service", () => {
         
         const id = recommendationFactories.numberFactory();
         const recommendation = recommendationFactories.recommendationDataFactory();
-        const updatedRecomendation = recommendationFactories.updatedRecommendatioDataFactory();
+        const updatedRecomendation = recommendationFactories.updatedRecommendationDataFactory();
         
         jest
         .spyOn(recommendationRepository, "updateScore")
@@ -172,6 +172,34 @@ describe("Unit test for recommendation service", () => {
         expect(recommendationRepository.updateScore).toBeCalled();
     });
 
+    it("Should remove recommendation if votes are less -5",async () => {
+        const id = recommendationFactories.numberFactory();
+        const recommendation = recommendationFactories.recommendationDataFactory();
+        const updatedRecomendation = recommendationFactories.hatedRecommendationDataFactory();
+        
+        jest
+        .spyOn(recommendationRepository, "updateScore")
+        .mockImplementationOnce((): any => {
+            return updatedRecomendation
+        });
+ 
+        jest
+        .spyOn(recommendationRepository, "find")
+        .mockImplementationOnce((): any => {
+            return recommendation
+        });
+
+        jest
+        .spyOn(recommendationRepository, "remove")
+        .mockImplementationOnce((): any => {});
+
+        await recommendationService.downvote(id);
+
+        expect(recommendationRepository.find).toBeCalled();
+        expect(recommendationRepository.updateScore).toBeCalled();
+        expect(recommendationRepository.remove).toBeCalled();
+    })
+
     it("Should get random recommendation",async () => {
         const recommendationArray = recommendationFactories.recommendationArrayFactory();
 
@@ -186,7 +214,7 @@ describe("Unit test for recommendation service", () => {
         expect(recommendationRepository.findAll).toBeCalled();
         expect(recommendationArray).toContain(result);
     })
-    it.todo("Should remove recommendation if votes are less -5")
+  
     it.todo("Should return gt if random params is less than 7")
     it.todo("Should return lte if random params is greater than 7")
     it.todo("Should return recomendation by score if recommendation length is greater than 0")
