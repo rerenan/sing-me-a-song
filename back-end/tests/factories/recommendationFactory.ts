@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 
 function recommendationDataFactory() {
   return {
-    name: faker.lorem.lines(),
+    name: faker.lorem.words(),
     youtubeLink: `https://www.youtube.com/watch?v=${faker.datatype.string(10)}`,
   };
 }
