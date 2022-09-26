@@ -18,14 +18,23 @@ beforeEach(async () => {
   });
 
 describe("Test POST /recommendations",  () => {
-    it("Should return status 201, if registered recommendation" , async () => {
+    it("Should return status 201, if registered recommendation", async () => {
         const recommendation = recommendationFactories.recommendationDataFactory();
 
         const result = await supertest(app).post("/recommendations").send(recommendation)
 
         expect(result.status).toEqual(201)
     })
-    it.todo("Should return status 409, if recommendation already exists")
+    it("Should return status 409, if recommendation already exists",async () => {
+        const recommendation = recommendationFactories.recommendationDataFactory();
+
+        await supertest(app).post("/recommendations").send(recommendation)
+
+        const result = await supertest(app).post("/recommendations").send(recommendation)
+        
+        expect(result.status).toEqual(409)
+
+    })
     it.todo("Should return status 422, if send recommendation in format invalid")
 })
 
