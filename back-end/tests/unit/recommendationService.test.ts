@@ -171,8 +171,21 @@ describe("Unit test for recommendation service", () => {
         expect(recommendationRepository.find).toBeCalled();
         expect(recommendationRepository.updateScore).toBeCalled();
     });
-    
-    it.todo("Should get random recommendation")
+
+    it("Should get random recommendation",async () => {
+        const recommendationArray = recommendationFactories.recommendationArrayFactory();
+
+        jest
+        .spyOn(recommendationRepository, "findAll")
+        .mockImplementationOnce((): any => {
+            return recommendationArray
+        });
+
+        const result = await recommendationService.getRandom();
+
+        expect(recommendationRepository.findAll).toBeCalled();
+        expect(recommendationArray).toContain(result);
+    })
     it.todo("Should remove recommendation if votes are less -5")
     it.todo("Should return gt if random params is less than 7")
     it.todo("Should return lte if random params is greater than 7")
