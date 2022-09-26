@@ -46,7 +46,13 @@ describe("Test POST /recommendations",  () => {
 })
 
 describe("Test GET /", () => {
-    it.todo("Should return status 200 and return recommendations")
+    it("Should return status 200 and return recommendations",async () => {
+        
+        const result = await supertest(app).get("/recommendations")
+
+        expect(result.status).toEqual(200);
+        expect(result.body).not.toBeNull();
+    })
 })
 
 describe("Test GET /random", () => {
