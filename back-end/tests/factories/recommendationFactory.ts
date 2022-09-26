@@ -36,10 +36,14 @@ function numberFactory() {
     return faker.datatype.number();
 }
 
+function floatLessSevenFactory(){
+    return faker.datatype.float({max: 0.7})
+}
 export const recommendationFactories = {
     recommendationDataFactory,
     recommendationArrayFactory,
     numberFactory,
     updatedRecommendationDataFactory,
-    hatedRecommendationDataFactory
+    hatedRecommendationDataFactory,
+    floatLessSevenFactory
 }
