@@ -139,6 +139,10 @@ describe("Test GET /:id/downvote", () => {
         expect(result.status).toEqual(200);
         expect(updatedRecommendation.body.score).toEqual(recommendations[0].score - 1)
     })
-    it.todo("Should return status 404 if recommendations not exists")
+    it("Should return status 404 if recommendations not exists", async () =>{
+        const result = await supertest(app).post("/recommendations/1/downvote")
+
+        expect(result.status).toEqual(404);
+    })
 })
 
